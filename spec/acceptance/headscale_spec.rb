@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper_acceptance'
+require 'json'
 
 def headscale_manifest(policy)
   <<~PUPPET
@@ -77,7 +78,7 @@ describe 'headscale' do
       pid_before = shell('systemctl show --property MainPID --value headscale').stdout.strip
       apply_manifest(headscale_manifest(DENY_ALL), catch_failures: true)
       expect(apply_manifest(headscale_manifest(DENY_ALL), catch_changes: true).exit_code).to eq(0)
-      expect(file('/etc/headscale/policy.hujson').content).to include('"grants": []')
+      expect(JSON.parse(file('/etc/headscale/policy.hujson').content)).to eq('grants' => [])
       expect(shell('systemctl show --property MainPID --value headscale').stdout.strip).to eq(pid_before)
     end
   end

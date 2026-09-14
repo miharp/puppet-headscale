@@ -23,14 +23,16 @@ BEAKER_SETFILE=debian12-64 BEAKER_PUPPET_COLLECTION=openvox8 bundle exec rake be
 BEAKER_SETFILE=almalinux9-64 BEAKER_PUPPET_COLLECTION=openvox8 bundle exec rake beaker
 ```
 
-On Apple Silicon set `DOCKER_DEFAULT_PLATFORM=linux/amd64`.
+On Apple Silicon use the arm64 setfiles instead: `debian12-AARCH64`, `almalinux9-AARCH64`
+(`DOCKER_DEFAULT_PLATFORM` is ignored by the docker-api gem).
 
 Regenerate `REFERENCE.md` after changing parameters or doc comments.
 
 ## Architecture
 
 - `manifests/init.pp` is the only parameterised class. It contains
-  `repo -> install -> config ~> service`; install also notifies service.
+  `repo -> install -> config ~> service`; install also notifies service;
+  `install -> policy -> service` without notify.
 - `install.pp` handles three `install_method`s: `deb` (archive downloads
   the official .deb, `package` with the dpkg provider and `ensure => latest`
   installs it, which upgrades when `version` changes), `binary` (archive
@@ -39,8 +41,10 @@ Regenerate `REFERENCE.md` after changing parameters or doc comments.
   It also manages `config_dir` and `data_dir`.
 - `config.pp` builds a hash mirroring upstream `config-example.yaml`,
   deep-merges `override_options`, and renders it with `stdlib::to_yaml`.
-  `policy` becomes `policy.hujson`; changes trigger `systemctl reload`
-  (SIGHUP), not a restart.
+- `policy.pp` renders `policy.hujson` and reloads (SIGHUP) on change. It
+  is a separate class because `config ~> service` would turn any change
+  inside `config` into a restart; `policy` is ordered before `service`
+  with no notify.
 - `service.pp` writes the unit (from `templates/headscale.service.epp`,
   a copy of upstream's hardened unit) for binary installs, or a drop-in
   adding `ReadWritePaths=<data_dir>` for packaged units.

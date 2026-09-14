@@ -251,6 +251,15 @@ BEAKER_SETFILE=debian12-64 BEAKER_PUPPET_COLLECTION=openvox8 bundle exec rake be
 BEAKER_SETFILE=almalinux9-64 BEAKER_PUPPET_COLLECTION=openvox8 bundle exec rake beaker
 ```
 
+On Apple Silicon use the arm64 images instead (headscale publishes arm64
+releases, and the amd64 base images cannot be pulled through the Docker
+API on an arm64 host):
+
+```console
+BEAKER_SETFILE=debian12-AARCH64 BEAKER_PUPPET_COLLECTION=openvox8 bundle exec rake beaker
+BEAKER_SETFILE=almalinux9-AARCH64 BEAKER_PUPPET_COLLECTION=openvox8 bundle exec rake beaker
+```
+
 CI runs the same checks through the
 [voxpupuli/gha-puppet](https://github.com/voxpupuli/gha-puppet) reusable
 workflow, which builds its acceptance matrix from `metadata.json` and

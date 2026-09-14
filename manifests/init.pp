@@ -291,6 +291,7 @@ class headscale (
   contain headscale::repo
   contain headscale::install
   contain headscale::config
+  contain headscale::policy
   contain headscale::service
 
   Class['headscale::repo']
@@ -300,4 +301,10 @@ class headscale (
 
   # A new package or binary version must restart the service.
   Class['headscale::install'] ~> Class['headscale::service']
+
+  # The policy is reloaded, not restarted, so it is ordered before the
+  # service without a notify relationship.
+  Class['headscale::install']
+  -> Class['headscale::policy']
+  -> Class['headscale::service']
 }

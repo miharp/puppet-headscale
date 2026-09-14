@@ -1,4 +1,4 @@
-# @summary Renders config.yaml and the policy file
+# @summary Renders config.yaml
 #
 # @api private
 class headscale::config {
@@ -117,30 +117,5 @@ class headscale::config {
     mode      => $headscale::config_mode,
     content   => "# This file is managed by Puppet. Local changes will be overwritten.\n${stdlib::to_yaml($config)}",
     show_diff => false,
-  }
-
-  if $headscale::policy =~ NotUndef {
-    $policy_content = $headscale::policy ? {
-      Hash    => stdlib::to_json_pretty($headscale::policy),
-      default => $headscale::policy,
-    }
-
-    # headscale re-reads the policy file on SIGHUP, so a policy change
-    # only needs a reload, not the restart a config.yaml change causes.
-    file { $policy_file:
-      ensure  => file,
-      owner   => 'root',
-      group   => $headscale::group,
-      mode    => $headscale::config_mode,
-      content => $policy_content,
-      notify  => Exec['headscale-reload-policy'],
-    }
-
-    exec { 'headscale-reload-policy':
-      command     => "systemctl reload ${headscale::service_name}",
-      path        => ['/bin', '/usr/bin'],
-      refreshonly => true,
-      onlyif      => "systemctl is-active --quiet ${headscale::service_name}",
-    }
   }
 }

@@ -18,12 +18,20 @@ describe 'headscale' do
       it { is_expected.to contain_class('headscale::repo') }
       it { is_expected.to contain_class('headscale::install') }
       it { is_expected.to contain_class('headscale::config') }
+      it { is_expected.to contain_class('headscale::policy') }
       it { is_expected.to contain_class('headscale::service') }
 
       it 'orders install, config and service' do
         expect(subject).to contain_class('headscale::install').that_comes_before('Class[headscale::config]')
         expect(subject).to contain_class('headscale::config').that_notifies('Class[headscale::service]')
         expect(subject).to contain_class('headscale::install').that_notifies('Class[headscale::service]')
+      end
+
+      it 'orders the policy before the service without notifying it' do
+        expect(subject).to contain_class('headscale::policy')
+          .that_requires('Class[headscale::install]')
+          .that_comes_before('Class[headscale::service]')
+        expect(subject).not_to contain_class('headscale::policy').that_notifies('Class[headscale::service]')
       end
 
       it { is_expected.not_to contain_yumrepo('headscale') }
