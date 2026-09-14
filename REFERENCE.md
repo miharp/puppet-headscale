@@ -12,8 +12,9 @@
 
 #### Private Classes
 
-* `headscale::config`: Renders config.yaml and the policy file
+* `headscale::config`: Renders config.yaml
 * `headscale::install`: Installs the headscale binary or package
+* `headscale::policy`: Renders the policy file and reloads headscale when it changes
 * `headscale::repo`: Manages the community COPR yum repository for headscale
 * `headscale::service`: Manages the headscale service
 
