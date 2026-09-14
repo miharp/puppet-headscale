@@ -251,6 +251,9 @@ BEAKER_SETFILE=debian12-64 BEAKER_PUPPET_COLLECTION=openvox8 bundle exec rake be
 BEAKER_SETFILE=almalinux9-64 BEAKER_PUPPET_COLLECTION=openvox8 bundle exec rake beaker
 ```
 
+Set `HEADSCALE_INSTALL_METHOD=binary` to exercise the binary install
+method on a Debian-family host as well.
+
 On Apple Silicon use the arm64 images instead (headscale publishes arm64
 releases, and the amd64 base images cannot be pulled through the Docker
 API on an arm64 host):

@@ -3,12 +3,19 @@
 require 'spec_helper_acceptance'
 require 'json'
 
+# The install method defaults per OS family (deb on Debian, binary on
+# RedHat). Set HEADSCALE_INSTALL_METHOD=binary to exercise the binary
+# install on a Debian-family host as well.
 def headscale_manifest(policy)
+  binary = ENV['HEADSCALE_INSTALL_METHOD'] == 'binary'
   <<~PUPPET
     class { 'headscale':
       server_url      => 'http://127.0.0.1:8080',
       dns_base_domain => 'tailnet.example.com',
       policy          => #{policy},
+      #{"install_method => 'binary'," if binary}
+      #{'manage_user    => true,' if binary}
+      #{"binary_path    => '/usr/local/bin/headscale'," if binary}
     }
   PUPPET
 end
