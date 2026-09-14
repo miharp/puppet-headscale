@@ -1,0 +1,4 @@
+---
+# OS-specific parameter defaults belong in this hierarchy; static
+# defaults stay inline in manifests/init.pp.
+{}

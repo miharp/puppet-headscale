@@ -1,0 +1,57 @@
+<%- | Stdlib::Absolutepath $binary_path,
+      String[1] $user,
+      String[1] $group,
+      Stdlib::Absolutepath $data_dir,
+| -%>
+# This file is managed by Puppet. Local changes will be overwritten.
+# Based on packaging/systemd/headscale.service from the headscale repository.
+[Unit]
+Description=headscale coordination server for Tailscale
+After=network.target
+
+[Service]
+Type=simple
+User=<%= $user %>
+Group=<%= $group %>
+ExecStart=<%= $binary_path %> serve
+ExecReload=/usr/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+
+WorkingDirectory=<%= $data_dir %>
+ReadWritePaths=<%= $data_dir %>
+
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+DevicePolicy=closed
+LockPersonality=true
+MemoryDenyWriteExecute=true
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateMounts=true
+PrivateTmp=true
+ProcSubset=pid
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectProc=invisible
+ProtectSystem=strict
+RemoveIPC=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RuntimeDirectory=headscale
+RuntimeDirectoryMode=0750
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged
+SystemCallFilter=~@resources
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

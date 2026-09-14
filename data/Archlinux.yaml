@@ -1,0 +1,6 @@
+---
+# Arch Linux packages headscale in the extra repository, including the
+# headscale user, a systemd unit and /usr/bin/headscale.
+headscale::install_method: 'package'
+headscale::manage_user: false
+headscale::binary_path: '/usr/bin/headscale'

@@ -1,0 +1,8 @@
+---
+fixtures:
+  forge_modules:
+    stdlib: puppetlabs/stdlib
+    archive: puppet/archive
+    # yumrepo left Puppet core; real agents get it with the AIO package,
+    # but gem-based unit tests need it declared.
+    yumrepo_core: puppetlabs/yumrepo_core
