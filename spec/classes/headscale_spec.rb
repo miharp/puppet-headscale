@@ -60,11 +60,11 @@ describe 'headscale' do
         expect(headscale_config['derp']['urls']).to eq(['https://controlplane.tailscale.com/derpmap/default'])
         expect(headscale_config['node']).to eq('expiry' => 0, 'ephemeral' => { 'inactivity_timeout' => '30m' })
         expect(headscale_config['database']).to eq('type' => 'sqlite',
-                                         'sqlite' => { 'path' => '/var/lib/headscale/db.sqlite', 'write_ahead_log' => true })
+                                                   'sqlite' => { 'path' => '/var/lib/headscale/db.sqlite', 'write_ahead_log' => true })
         expect(headscale_config['log']).to eq('level' => 'info', 'format' => 'text')
         expect(headscale_config['dns']).to include('magic_dns' => true, 'base_domain' => 'example.com', 'override_local_dns' => true)
         expect(headscale_config['dns']['nameservers']).to eq('global' => ['1.1.1.1', '1.0.0.1', '2606:4700:4700::1111', '2606:4700:4700::1001'],
-                                                    'split' => {})
+                                                             'split' => {})
         expect(headscale_config['logtail']).to eq('enabled' => false)
         expect(headscale_config['taildrop']).to eq('enabled' => true)
         expect(headscale_config['auto_update']).to eq('enabled' => false)
@@ -141,7 +141,7 @@ describe 'headscale' do
 
         it do
           expect(headscale_config['derp']['server']).to include('enabled' => true, 'ipv4' => '198.51.100.1', 'ipv6' => '2001:db8::1',
-                                                      'private_key_path' => '/var/lib/headscale/derp_server_private.key')
+                                                                'private_key_path' => '/var/lib/headscale/derp_server_private.key')
         end
       end
 
@@ -152,7 +152,7 @@ describe 'headscale' do
 
         it do
           expect(headscale_config['database']).to include('type' => 'postgres',
-                                                'postgres' => { 'host' => 'db.example.com', 'port' => 5432, 'name' => 'headscale' })
+                                                          'postgres' => { 'host' => 'db.example.com', 'port' => 5432, 'name' => 'headscale' })
         end
       end
 
@@ -164,7 +164,7 @@ describe 'headscale' do
 
         it do
           expect(headscale_config).to include('server_url' => 'https://headscale.example.com', 'listen_addr' => '0.0.0.0:443',
-                                    'tls_letsencrypt_hostname' => 'headscale.example.com', 'acme_email' => 'admin@example.com')
+                                              'tls_letsencrypt_hostname' => 'headscale.example.com', 'acme_email' => 'admin@example.com')
         end
       end
 
@@ -231,11 +231,11 @@ describe 'headscale' do
             .that_notifies('Service[headscale]')
           content = catalogue.resource('file', '/etc/systemd/system/headscale.service')[:content]
           expect(content).to match(%r{^ExecStart=/usr/local/bin/headscale serve$})
-          expect(content).to match(/^User=headscale$/)
-          expect(content).to match(/^Group=headscale$/)
+          expect(content).to match(%r{^User=headscale$})
+          expect(content).to match(%r{^Group=headscale$})
           expect(content).to match(%r{^WorkingDirectory=/var/lib/headscale$})
           expect(content).to match(%r{^ReadWritePaths=/var/lib/headscale$})
-          expect(content).to match(/^ProtectSystem=strict$/)
+          expect(content).to match(%r{^ProtectSystem=strict$})
         end
 
         it { is_expected.not_to contain_file('/etc/systemd/system/headscale.service.d/puppet.conf') }
@@ -284,7 +284,7 @@ describe 'headscale' do
         context 'when on an unsupported architecture' do
           let(:facts) { os_facts.merge(os: os_facts[:os].merge('architecture' => 'ppc64le')) }
 
-          it { is_expected.to compile.and_raise_error(/no headscale release exists for architecture 'ppc64le'/) }
+          it { is_expected.to compile.and_raise_error(%r{no headscale release exists for architecture 'ppc64le'}) }
         end
       end
 
@@ -324,7 +324,7 @@ describe 'headscale' do
                 .that_comes_before('Package[headscale]')
             end
           else
-            it { is_expected.to compile.and_raise_error(/no yum repository is available for the #{os_facts[:os]['family']} family/) }
+            it { is_expected.to compile.and_raise_error(%r{no yum repository is available for the #{os_facts[:os]['family']} family}) }
           end
         end
       end
@@ -380,7 +380,7 @@ describe 'headscale' do
         context 'with install_method => deb' do
           let(:params) { { install_method: 'deb' } }
 
-          it { is_expected.to compile.and_raise_error(/install_method 'deb' is only available on the Debian family/) }
+          it { is_expected.to compile.and_raise_error(%r{install_method 'deb' is only available on the Debian family}) }
         end
       when 'Archlinux'
         it 'installs the distribution package by default' do

@@ -1,6 +1,6 @@
 ---
 inherit_gem:
-  voxpupuli-rubocop: rubocop.yml
+  voxpupuli-test: rubocop.yml
 
 # In rspec-puppet the subject is the implicit catalogue; it cannot be
 # usefully named.

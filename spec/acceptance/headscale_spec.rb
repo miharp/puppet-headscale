@@ -49,12 +49,10 @@ describe 'headscale' do
     it { is_expected.to be_enabled }
   end
 
-  describe port(8080) do
-    it { is_expected.to be_listening }
-  end
-
-  describe port(9090) do
-    it { is_expected.to be_listening }
+  [8080, 9090].each do |listen_port|
+    describe port(listen_port) do
+      it { is_expected.to be_listening }
+    end
   end
 
   describe 'the headscale server' do
