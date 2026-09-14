@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optional policy file (`policy`) applied with a service reload.
 - Management of the `headscale` user, directories, systemd unit (binary
   installs) or a drop-in for the packaged unit, and the service.
+- `download_options` (default: curl retries transient errors three times),
+  since GitHub release downloads intermittently answer 5xx.
 - `binary_path` defaults to `/usr/bin/headscale` for every install method,
   matching upstream's binary install and keeping `sudo headscale` on the
   RedHat family's sudo `secure_path`.

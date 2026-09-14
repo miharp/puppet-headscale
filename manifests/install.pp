@@ -47,10 +47,11 @@ class headscale::install {
       $deb_path = "/var/tmp/${deb_file}"
 
       archive { $deb_path:
-        source        => pick($headscale::download_url, "${release_url}/${deb_file}"),
-        checksum      => $headscale::download_checksum,
-        checksum_type => $checksum_type,
-        extract       => false,
+        source           => pick($headscale::download_url, "${release_url}/${deb_file}"),
+        checksum         => $headscale::download_checksum,
+        checksum_type    => $checksum_type,
+        download_options => $headscale::download_options,
+        extract          => false,
       }
 
       # The dpkg provider is not versionable, but 'latest' compares the
@@ -105,11 +106,12 @@ class headscale::install {
       }
 
       archive { $versioned_binary:
-        source        => pick($headscale::download_url, "${release_url}/${binary_file}"),
-        checksum      => $headscale::download_checksum,
-        checksum_type => $checksum_type,
-        extract       => false,
-        require       => File[$headscale::install_dir],
+        source           => pick($headscale::download_url, "${release_url}/${binary_file}"),
+        checksum         => $headscale::download_checksum,
+        checksum_type    => $checksum_type,
+        download_options => $headscale::download_options,
+        extract          => false,
+        require          => File[$headscale::install_dir],
       }
 
       file { $versioned_binary:

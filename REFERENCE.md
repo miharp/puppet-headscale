@@ -85,6 +85,7 @@ The following parameters are available in the `headscale` class:
 * [`install_method`](#-headscale--install_method)
 * [`download_url`](#-headscale--download_url)
 * [`download_checksum`](#-headscale--download_checksum)
+* [`download_options`](#-headscale--download_options)
 * [`install_dir`](#-headscale--install_dir)
 * [`binary_path`](#-headscale--binary_path)
 * [`manage_repo`](#-headscale--manage_repo)
@@ -191,6 +192,16 @@ SHA-256 checksum of the downloaded .deb or binary, from the
 not checksummed otherwise.
 
 Default value: `undef`
+
+##### <a name="-headscale--download_options"></a>`download_options`
+
+Data type: `Array[String[1]]`
+
+Extra options for the download command (curl). The default retries
+transient failures, which GitHub's release downloads produce now and
+then (HTTP 5xx); curl only retries timeouts and 408/429/5xx.
+
+Default value: `['--retry', '3', '--retry-delay', '5']`
 
 ##### <a name="-headscale--install_dir"></a>`install_dir`
 

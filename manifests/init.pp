@@ -65,6 +65,10 @@
 #   SHA-256 checksum of the downloaded .deb or binary, from the
 #   `checksums.txt` of the release. Verified when set; the download is
 #   not checksummed otherwise.
+# @param download_options
+#   Extra options for the download command (curl). The default retries
+#   transient failures, which GitHub's release downloads produce now and
+#   then (HTTP 5xx); curl only retries timeouts and 408/429/5xx.
 # @param install_dir
 #   Directory the versioned binaries are stored in with install_method
 #   'binary'.
@@ -225,6 +229,7 @@ class headscale (
   Enum['deb', 'binary', 'package'] $install_method = 'binary',
   Optional[Stdlib::HTTPUrl] $download_url = undef,
   Optional[Pattern[/\A[0-9a-f]{64}\z/]] $download_checksum = undef,
+  Array[String[1]] $download_options = ['--retry', '3', '--retry-delay', '5'],
   Stdlib::Absolutepath $install_dir = '/opt/headscale',
   Stdlib::Absolutepath $binary_path = '/usr/bin/headscale',
   Boolean $manage_repo = false,

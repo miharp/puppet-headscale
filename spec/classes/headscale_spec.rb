@@ -215,7 +215,8 @@ describe 'headscale' do
         it 'downloads the versioned binary without a checksum by default' do
           expect(subject).to contain_archive('/opt/headscale/headscale_0.29.3_linux_amd64')
             .with(source: 'https://github.com/juanfont/headscale/releases/download/v0.29.3/headscale_0.29.3_linux_amd64',
-                  checksum_type: 'none', extract: false)
+                  checksum_type: 'none', extract: false,
+                  download_options: ['--retry', '3', '--retry-delay', '5'])
             .that_requires('File[/opt/headscale]')
         end
 
@@ -263,6 +264,12 @@ describe 'headscale' do
             expect(subject).to contain_archive('/opt/headscale/headscale_0.29.3_linux_amd64')
               .with(checksum: 'a' * 64, checksum_type: 'sha256')
           end
+        end
+
+        context 'with download_options' do
+          let(:params) { super().merge(download_options: ['--retry', '10']) }
+
+          it { is_expected.to contain_archive('/opt/headscale/headscale_0.29.3_linux_amd64').with_download_options(['--retry', '10']) }
         end
 
         context 'with download_url' do
@@ -342,7 +349,8 @@ describe 'headscale' do
         it 'installs the official .deb by default' do
           expect(subject).to contain_archive('/var/tmp/headscale_0.29.3_linux_amd64.deb')
             .with(source: 'https://github.com/juanfont/headscale/releases/download/v0.29.3/headscale_0.29.3_linux_amd64.deb',
-                  checksum_type: 'none', extract: false)
+                  checksum_type: 'none', extract: false,
+                  download_options: ['--retry', '3', '--retry-delay', '5'])
           expect(subject).to contain_package('headscale')
             .with(ensure: 'latest', provider: 'dpkg', source: '/var/tmp/headscale_0.29.3_linux_amd64.deb')
             .that_requires('Archive[/var/tmp/headscale_0.29.3_linux_amd64.deb]')
