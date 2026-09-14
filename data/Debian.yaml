@@ -1,7 +1,6 @@
 ---
 # headscale publishes official .deb packages for Debian 12+ and
 # Ubuntu 22.04+ on its GitHub releases page. The package creates the
-# headscale user and ships a systemd unit and /usr/bin/headscale.
+# headscale user and ships a systemd unit.
 headscale::install_method: 'deb'
 headscale::manage_user: false
-headscale::binary_path: '/usr/bin/headscale'

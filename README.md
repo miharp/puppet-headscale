@@ -26,9 +26,9 @@ the [official installation guide](https://headscale.net/stable/setup/install/off
   the GitHub releases page and installs it with dpkg; the package
   creates the `headscale` user and ships the systemd unit
 * on the RedHat family (and any other Linux), downloads the official
-  release binary into a versioned path, and manages the `headscale`
-  system user and a hardened systemd unit (the upstream unit); raising
-  `version` upgrades in place
+  release binary into a versioned path linked from `/usr/bin/headscale`,
+  and manages the `headscale` system user and a hardened systemd unit
+  (the upstream unit); raising `version` upgrades in place
 * on Arch Linux, installs the `headscale` package from the `extra`
   repository; the RedHat family can also use the community
   [COPR](https://copr.fedorainfracloud.org/coprs/jonathanspw/headscale/)
@@ -51,7 +51,7 @@ with an nginx or Caddy module for a production deployment.
 ### What headscale affects
 
 * The `headscale` package (`.deb`, distribution package) or the release
-  binary under `/opt/headscale` (`install_dir`) with `/usr/local/bin/headscale`
+  binary under `/opt/headscale` (`install_dir`) with `/usr/bin/headscale`
   (`binary_path`) linked to the current version
 * The `headscale` system user and group on binary installs
   (`manage_user`)
@@ -181,7 +181,6 @@ The install method defaults per OS (`deb` on the Debian family,
 class { 'headscale':
   install_method  => 'binary',
   manage_user     => true,
-  binary_path     => '/usr/local/bin/headscale',
   server_url      => 'https://headscale.example.com',
   dns_base_domain => 'tailnet.example.com',
 }

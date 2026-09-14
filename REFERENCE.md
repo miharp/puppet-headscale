@@ -32,7 +32,7 @@ the `headscale` systemd service.
 
 Binary installs are versioned: each release is downloaded to
 `${install_dir}/headscale_${version}_linux_${arch}` and `binary_path`
-is a symlink to the current one, so raising `version` upgrades in
+(/usr/bin/headscale) is a symlink to the current one, so raising `version` upgrades in
 place (download, link flip, service restart) and the previous binary
 remains for rollback. Package installs from the .deb upgrade the same
 way: a new .deb is downloaded and installed when `version` changes.
@@ -207,9 +207,11 @@ Data type: `Stdlib::Absolutepath`
 
 Path of the headscale executable. With install_method 'binary' this
 is a symlink to the versioned binary in install_dir; with the other
-methods it is where the package installs the binary.
+methods it is where the package installs the binary. /usr/bin, as
+upstream's own binary install uses, keeps `sudo headscale` working on
+the RedHat family, whose sudo secure_path omits /usr/local/bin.
 
-Default value: `'/usr/local/bin/headscale'`
+Default value: `'/usr/bin/headscale'`
 
 ##### <a name="-headscale--manage_repo"></a>`manage_repo`
 

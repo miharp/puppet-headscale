@@ -15,7 +15,6 @@ def headscale_manifest(policy)
       policy          => #{policy},
       #{"install_method => 'binary'," if binary}
       #{'manage_user    => true,' if binary}
-      #{"binary_path    => '/usr/local/bin/headscale'," if binary}
     }
   PUPPET
 end

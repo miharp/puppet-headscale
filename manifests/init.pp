@@ -10,7 +10,7 @@
 #
 # Binary installs are versioned: each release is downloaded to
 # `${install_dir}/headscale_${version}_linux_${arch}` and `binary_path`
-# is a symlink to the current one, so raising `version` upgrades in
+# (/usr/bin/headscale) is a symlink to the current one, so raising `version` upgrades in
 # place (download, link flip, service restart) and the previous binary
 # remains for rollback. Package installs from the .deb upgrade the same
 # way: a new .deb is downloaded and installed when `version` changes.
@@ -71,7 +71,9 @@
 # @param binary_path
 #   Path of the headscale executable. With install_method 'binary' this
 #   is a symlink to the versioned binary in install_dir; with the other
-#   methods it is where the package installs the binary.
+#   methods it is where the package installs the binary. /usr/bin, as
+#   upstream's own binary install uses, keeps `sudo headscale` working on
+#   the RedHat family, whose sudo secure_path omits /usr/local/bin.
 # @param manage_repo
 #   Whether to manage the community COPR yum repository for
 #   install_method 'package'. Only applies to the RedHat family.
@@ -224,7 +226,7 @@ class headscale (
   Optional[Stdlib::HTTPUrl] $download_url = undef,
   Optional[Pattern[/\A[0-9a-f]{64}\z/]] $download_checksum = undef,
   Stdlib::Absolutepath $install_dir = '/opt/headscale',
-  Stdlib::Absolutepath $binary_path = '/usr/local/bin/headscale',
+  Stdlib::Absolutepath $binary_path = '/usr/bin/headscale',
   Boolean $manage_repo = false,
   Stdlib::HTTPUrl $repo_baseurl = 'https://download.copr.fedorainfracloud.org/results/jonathanspw/headscale/epel-$releasever-$basearch/',
   Stdlib::HTTPUrl $repo_gpgkey = 'https://download.copr.fedorainfracloud.org/results/jonathanspw/headscale/pubkey.gpg',

@@ -199,7 +199,7 @@ describe 'headscale' do
       end
 
       context 'with install_method => binary' do
-        let(:params) { { install_method: 'binary', manage_user: true, binary_path: '/usr/local/bin/headscale' } }
+        let(:params) { { install_method: 'binary', manage_user: true } }
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.not_to contain_package('headscale') }
@@ -226,7 +226,7 @@ describe 'headscale' do
         end
 
         it do
-          expect(subject).to contain_file('/usr/local/bin/headscale')
+          expect(subject).to contain_file('/usr/bin/headscale')
             .with(ensure: 'link', target: '/opt/headscale/headscale_0.29.3_linux_amd64')
         end
 
@@ -238,7 +238,7 @@ describe 'headscale' do
             .with(ensure: 'file', owner: 'root', group: 'root', mode: '0644')
             .that_notifies('Service[headscale]')
           content = catalogue.resource('file', '/etc/systemd/system/headscale.service')[:content]
-          expect(content).to match(%r{^ExecStart=/usr/local/bin/headscale serve$})
+          expect(content).to match(%r{^ExecStart=/usr/bin/headscale serve$})
           expect(content).to match(%r{^User=headscale$})
           expect(content).to match(%r{^Group=headscale$})
           expect(content).to match(%r{^WorkingDirectory=/var/lib/headscale$})
@@ -253,7 +253,7 @@ describe 'headscale' do
 
           it { is_expected.to contain_archive('/opt/headscale/headscale_0.30.0_linux_amd64') }
           it { is_expected.not_to contain_archive('/opt/headscale/headscale_0.29.3_linux_amd64') }
-          it { is_expected.to contain_file('/usr/local/bin/headscale').with_target('/opt/headscale/headscale_0.30.0_linux_amd64') }
+          it { is_expected.to contain_file('/usr/bin/headscale').with_target('/opt/headscale/headscale_0.30.0_linux_amd64') }
         end
 
         context 'with download_checksum' do
@@ -297,7 +297,7 @@ describe 'headscale' do
       end
 
       context 'with install_method => package' do
-        let(:params) { { install_method: 'package', manage_user: false, binary_path: '/usr/bin/headscale' } }
+        let(:params) { { install_method: 'package', manage_user: false } }
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_package('headscale').with_ensure('installed') }
@@ -378,7 +378,7 @@ describe 'headscale' do
       when 'RedHat'
         it 'installs the release binary by default' do
           expect(subject).to contain_archive('/opt/headscale/headscale_0.29.3_linux_amd64')
-          expect(subject).to contain_file('/usr/local/bin/headscale').with_ensure('link')
+          expect(subject).to contain_file('/usr/bin/headscale').with_ensure('link')
           expect(subject).to contain_user('headscale')
           expect(subject).to contain_file('/etc/systemd/system/headscale.service')
         end

@@ -37,7 +37,8 @@ Regenerate `REFERENCE.md` after changing parameters or doc comments.
   the official .deb, `package` with the dpkg provider and `ensure => latest`
   installs it, which upgrades when `version` changes), `binary` (archive
   downloads the release binary to `install_dir/headscale_<version>_linux_<arch>`,
-  `binary_path` is a symlink to it), `package` (distribution or COPR).
+  `binary_path`, `/usr/bin/headscale` for every method, is a symlink to it),
+  `package` (distribution or COPR).
   It also manages `config_dir` and `data_dir`.
 - `config.pp` builds a hash mirroring upstream `config-example.yaml`,
   deep-merges `override_options`, and renders it with `stdlib::to_yaml`.
