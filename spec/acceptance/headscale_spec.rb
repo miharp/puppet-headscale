@@ -25,6 +25,12 @@ DENY_ALL = "{ 'grants' => [] }"
 describe 'headscale' do
   let(:manifest) { headscale_manifest(ALLOW_ALL) }
 
+  # Beaker logs the command output, which otherwise leaves a failed
+  # service start in the CI log with symptoms only.
+  after do |example|
+    shell('journalctl -u headscale --no-pager -n 50', acceptable_exit_codes: [0, 1]) if example.exception
+  end
+
   it_behaves_like 'an idempotent resource'
 
   describe file('/etc/headscale/config.yaml') do

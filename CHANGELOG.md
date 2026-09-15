@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - README pointer to the `blockops/tailscale` module for enrolling clients
   against headscale.
+- The acceptance suite prints the headscale journal when a check fails.
+
+### Fixed
+
+- The policy reload no longer races the service start. On the Debian
+  family the `.deb` postinst starts headscale immediately, and the
+  reload's SIGHUP could reach the process before its signal handler
+  was installed, killing it; the reload now runs after the service and
+  only when the running instance is older than the policy file.
 
 ## [0.1.0] - 2026-09-15
 
