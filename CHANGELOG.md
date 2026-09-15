@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-15
+
 ### Added
 
 - README pointer to the `blockops/tailscale` module for enrolling clients
@@ -39,5 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   matching upstream's binary install and keeping `sudo headscale` on the
   RedHat family's sudo `secure_path`.
 
-[Unreleased]: https://github.com/miharp/puppet-headscale/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/miharp/puppet-headscale/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/miharp/puppet-headscale/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/miharp/puppet-headscale/releases/tag/v0.1.0
