@@ -27,10 +27,8 @@ describe 'headscale' do
         expect(subject).to contain_class('headscale::install').that_notifies('Class[headscale::service]')
       end
 
-      it 'orders the policy before the service without notifying it' do
-        expect(subject).to contain_class('headscale::policy')
-          .that_requires('Class[headscale::install]')
-          .that_comes_before('Class[headscale::service]')
+      it 'orders the policy after the install without notifying the service' do
+        expect(subject).to contain_class('headscale::policy').that_requires('Class[headscale::install]')
         expect(subject).not_to contain_class('headscale::policy').that_notifies('Class[headscale::service]')
       end
 
@@ -103,14 +101,22 @@ describe 'headscale' do
         it 'renders the policy as JSON and reloads the service on change' do
           expect(subject).to contain_file('/etc/headscale/policy.hujson')
             .with(ensure: 'file', owner: 'root', group: 'headscale', mode: '0640')
+            .that_comes_before('Class[headscale::service]')
             .that_notifies('Exec[headscale-reload-policy]')
           content = catalogue.resource('file', '/etc/headscale/policy.hujson')[:content]
           expect(JSON.parse(content)).to eq('grants' => [{ 'src' => ['*'], 'dst' => ['*'], 'ip' => ['*'] }])
         end
 
-        it do
+        it 'reloads after the service, only an instance older than the policy file' do
           expect(subject).to contain_exec('headscale-reload-policy')
-            .with(command: 'systemctl reload headscale', refreshonly: true, onlyif: 'systemctl is-active --quiet headscale')
+            .with(command: 'systemctl reload headscale', provider: 'shell', refreshonly: true)
+            .that_requires('Class[headscale::service]')
+          onlyif = catalogue.resource('exec', 'headscale-reload-policy')[:onlyif]
+          expect(onlyif).to eq([
+                                 'systemctl is-active --quiet headscale',
+                                 'test $(stat -c %Y /etc/headscale/policy.hujson) -gt ' \
+                                 '$(date -d "$(systemctl show -p ActiveEnterTimestamp --value headscale)" +%s)',
+                               ])
         end
       end
 

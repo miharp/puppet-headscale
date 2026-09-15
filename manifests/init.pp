@@ -309,9 +309,7 @@ class headscale (
   # A new package or binary version must restart the service.
   Class['headscale::install'] ~> Class['headscale::service']
 
-  # The policy is reloaded, not restarted, so it is ordered before the
-  # service without a notify relationship.
-  Class['headscale::install']
-  -> Class['headscale::policy']
-  -> Class['headscale::service']
+  # The policy file is ordered before the service and its reload after
+  # it inside headscale::policy; neither notifies the service.
+  Class['headscale::install'] -> Class['headscale::policy']
 }
