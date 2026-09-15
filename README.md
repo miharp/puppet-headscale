@@ -199,7 +199,9 @@ bundle exec rake strings:generate:reference
 
 * Debian 12/13, Ubuntu 22.04/24.04, the RedHat family (RHEL, Rocky,
   AlmaLinux, Oracle Linux, CentOS Stream) 9/10 and Arch Linux, on amd64
-  and arm64 (the architectures headscale publishes releases for).
+  and arm64 (the architectures headscale publishes releases for). Arch
+  Linux is covered by the unit tests only; there is no Beaker image for
+  it, so the acceptance suite does not run there.
 * headscale only publishes `.deb` packages; the RedHat family defaults
   to the release binary. The COPR repository used with `manage_repo`
   is maintained by the community and can lag behind upstream releases.

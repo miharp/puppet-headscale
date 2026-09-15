@@ -7,6 +7,13 @@
   "source": "https://github.com/miharp/puppet-headscale",
   "project_page": "https://github.com/miharp/puppet-headscale",
   "issues_url": "https://github.com/miharp/puppet-headscale/issues",
+  "tags": [
+    "headscale",
+    "tailscale",
+    "vpn",
+    "wireguard",
+    "mesh"
+  ],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",

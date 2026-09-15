@@ -270,9 +270,9 @@ Default value: `'installed'`
 
 Data type: `Boolean`
 
-Whether to manage the headscale system user and group. Defaults to
-true except on the Debian family and Arch Linux, where the package
-creates them.
+Whether to manage the headscale system user and group. Only applies
+to install_method 'binary'; the .deb and distribution packages create
+them. Defaults to true except on the Debian family and Arch Linux.
 
 Default value: `true`
 

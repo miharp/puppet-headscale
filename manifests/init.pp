@@ -91,9 +91,9 @@
 #   Ensure value of the package with install_method 'package', e.g.
 #   'installed', 'latest' or a version.
 # @param manage_user
-#   Whether to manage the headscale system user and group. Defaults to
-#   true except on the Debian family and Arch Linux, where the package
-#   creates them.
+#   Whether to manage the headscale system user and group. Only applies
+#   to install_method 'binary'; the .deb and distribution packages create
+#   them. Defaults to true except on the Debian family and Arch Linux.
 # @param user
 #   System user headscale runs as and that owns the data directory.
 # @param group
