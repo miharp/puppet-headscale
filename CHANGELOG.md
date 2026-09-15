@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- README pointer to the `blockops/tailscale` module for enrolling clients
+  against headscale.
+
 ## [0.1.0] - 2026-09-15
 
 ### Added

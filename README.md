@@ -44,7 +44,17 @@ the [official installation guide](https://headscale.net/stable/setup/install/off
 The module's responsibility is the headscale server. It does **not**
 manage a reverse proxy, TLS certificates (beyond headscale's built-in
 Let's Encrypt client), DERP servers or the Tailscale clients; pair it
-with an nginx or Caddy module for a production deployment.
+with an nginx or Caddy module for a production deployment. For the
+clients, [blockops/tailscale](https://forge.puppet.com/modules/blockops/tailscale)
+installs Tailscale and enrols the node against headscale when given the
+login server and a pre-authentication key:
+
+```puppet
+class { 'tailscale':
+  auth_key   => Sensitive('<pre-auth key>'),
+  up_options => { 'login-server' => 'https://headscale.example.com' },
+}
+```
 
 ## Setup
 
